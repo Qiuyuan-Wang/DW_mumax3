@@ -1,0 +1,23 @@
+SetGridsize(256, 16, 1)
+SetCellsize(0.1e-9, 0.2e-9, 0.2e-9)
+
+Msat    = 48.8e3
+Aex     = 5.32e-13
+anisU   = vector(0, 0, 1)
+Ku1     = 2.88e5
+alpha   = 0.05
+Xi      = 0
+
+m     = twoDomain(0, 0, 1, 1, 1, 0, 0, 0, -1) // up-down domains with wall between Bloch and Néél type
+relax()
+
+// Set post-step function that centers simulation window on domain wall.
+ext_centerWall(2) // keep m[2] (= m_z) close to zero
+
+// Schedule output
+autosave(m, 100e-12)
+
+tableadd(ext_dwpos)   // domain wall position
+tableautosave(10e-12)
+
+// Run for 5ns with current through the sample
